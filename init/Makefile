@@ -32,11 +32,11 @@ all: build/init.cpio
 build/%.o: src/%.c src/sys.h
 	@echo "  CC      $@"
 	@mkdir -p build
-	$(CC) $(CCFLAGS) -c -o $@ $<
+	@$(CC) $(CCFLAGS) -c -o $@ $<
 
 build/init: $(OBJS) src/init.ld
 	@echo "  LD      $@"
-	$(LD) $(LDFLAGS) -o $@ -T src/init.ld $(OBJS)
+	@$(LD) $(LDFLAGS) -o $@ -T src/init.ld $(OBJS)
 
 build/init.cpio: build/init
 	@echo "  CPIO    init"

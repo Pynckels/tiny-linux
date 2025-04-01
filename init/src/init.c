@@ -15,10 +15,11 @@
 
 // -----------------------------------------------------------------------------
 
+__attribute__((section(".text.main")))
 int main() {
     char      command[255];
     int       count;
-    pid_t     fork_result
+    pid_t     fork_result;
     siginfo_t info;
 
     while (1) {
