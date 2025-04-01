@@ -13,15 +13,15 @@
 
     void sys_exit(int error_code);
 
-    long sys_execve(const char __user *filename,
+    long sys_execve(const char __user *filepath,
                     const char __user *const __user *argv,
                     const char __user *const __user *envp);
 
     long sys_fork(void);
 
-    long sys_read(const char __user *path,
-                  char __user *buf,
-                  int bufsiz);
+    long sys_read(unsigned int fd,
+                  char __user *buffer,
+                  int buffer_size);
 
     long sys_waitid(int which,
                     pid_t pid,
@@ -30,7 +30,7 @@
                     struct rusage __user *ru);
 
     long sys_write(unsigned int fd,
-                   const char __user *buf,
-                   size_t count);
+                   const char __user *buffer,
+                   size_t buffer_size);
 
 #endif // __SYS_H__

@@ -54,11 +54,11 @@ long int sys_fork(void)
 
 // -----------------------------------------------------------------------------
 
-long int sys_read(const char __user *path,
+long int sys_read(unsigned int fd,
                   char __user *buffer,
                   int buffer_size)
 {
-    return syscall(SYS_read, path, buffer, buffer_size);
+    return syscall(SYS_read, fd, buffer, buffer_size);
 }
 
 // -----------------------------------------------------------------------------
