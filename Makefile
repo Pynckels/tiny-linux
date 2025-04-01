@@ -116,12 +116,12 @@ clean-kernel:
 clean-init:
 
 	@echo "  CLEAN   init"
-	@$(MAKE) --no-print-directory clean     -C init   $(STDOUT)
+	@$(MAKE) --no-print-directory clean -C init   $(STDOUT)
 
 clean-iso:
 
 	@echo "  CLEAN   iso"
-	@rm $(DISK)
+	@rm -f $(DISK)
 
 # ------------------------------------------------------------------------------
 
