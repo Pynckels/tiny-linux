@@ -4,8 +4,8 @@
 // This software is distributed as-is, with no warranty or
 // guarantee of its functionality, performance, or usability.
 
-#ifndef __SYSCALLS_H__
-#define __SYSCALLS_H__
+#ifndef __SYS_H__
+#define __SYS_H__
 
     #include <sys/wait.h>
 
@@ -33,4 +33,4 @@
                    const char __user *buf,
                    size_t count);
 
-#endif // __SYSCALLS_H__
+#endif // __SYS_H__

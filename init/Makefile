@@ -4,16 +4,24 @@
 # This software is distributed as-is, with no warranty or
 # guarantee of its functionality, performance, or usability.
 
-AS      = as
-ASFLAGS =
+# Set compiler parameters
+CC       = gcc
+CCFLAGS  = -Os -Wall -Werror
+CCFLAGS += -fno-ident -fno-asynchronous-unwind-tables -fno-stack-protector -fomit-frame-pointer
 
-CC      = gcc
-CCFLAGS = -Os -fno-ident -fno-asynchronous-unwind-tables -fno-stack-protector -fomit-frame-pointer
+# Set linker parameters
+LD       = ld
+LDFLAGS  = --strip-all -z noexecstack -z nodefaultlib
 
-LD      = ld
-LDFLAGS = --strip-all -z noexecstack
-
+# Get the number of available processors
 NJBS = $(shell nproc)
+
+# Get all .c source files in src
+SRCS = $(wildcard src/*.c)
+
+# Replace .c with .o and move to build
+OBJS = $(SRCS:.c=.o)
+OBJS := $(patsubst src/%, build/%, $(OBJS))
 
 # ------------------------------------------------------------------------------
 
@@ -21,42 +29,35 @@ all: build/init.cpio
 
 # ------------------------------------------------------------------------------
 
-build:
-	@echo "  MKDIR   build"
+build/%.o: src/%.c src/sys.h
+	@echo "  CC      $@"
 	@mkdir -p build
+	@$(CC) $(CCFLAGS) -c -o $@ $<
 
-build/init: src/init.ld build/init.o build/syscalls.o
-	@echo "  LD      init"
-	@$(LD) $(LDFLAGS) -o build/init -T src/init.ld build/init.o build/syscalls.o
+build/init: $(OBJS) src/init.ld
+	@echo "  LD      $@"
+	@$(LD) $(LD_FLAGS) -o $@ -T src/init.ld $(OBJS)
 
 build/init.cpio: build/init
 	@echo "  CPIO    init"
 	@cd build && echo "init" | cpio -H newc -o > init.cpio
 
-build/init.o: build src/init.c src/syscalls.h
-	@echo "  CC      init"
-	@$(CC) $(CCFLAGS) -c -o build/init.o src/init.c
-
-src/syscalls.h:
-
-build/syscalls.o: build src/syscalls.S
-	@echo "  AS      syscalls"
-	@$(AS) $(ASFLAGS) -o build/syscalls.o src/syscalls.S
+src/sys.h:
 
 # ------------------------------------------------------------------------------
 
 clean:
 	@echo "  CLEAN"
-	@rm -r build
+	@rm -rf build
 
 # ------------------------------------------------------------------------------
 
 help:
-	@echo "usage: make [build-init | clean | help ]"
+	@echo "usage: make [all | clean | help ]"
 	@echo " "
 	@echo "Build a minimal non-secure Linux user space."
 	@echo " "
-	@echo "options:"
-	@echo "  build-init      build a user space application"
+	@echo "targets:"
+	@echo "  all             build a user space application"
 	@echo "  clean           reset project directory"
 	@echo "  help            show this help message and exit"
