@@ -6,14 +6,14 @@
 
 # Set compiler parameters
 CC       = gcc
-CCFLAGS  = -Os
+CCFLAGS  = -Os -Oz
 CCFLAGS += -Wall -Werror
 CCFLAGS += -nostdlib -nostartfiles
-CCFLAGS += -fno-ident -fno-asynchronous-unwind-tables -fno-stack-protector -fomit-frame-pointer
+CCFLAGS += -fno-asynchronous-unwind-tables -fno-ident
 
 # Set linker parameters
 LD       = ld
-LDFLAGS  = --gc-sections --strip-all -z noexecstack -z nodefaultlib
+LDFLAGS  = -static --strip-all -z nodefaultlib
 
 # Get the number of available processors
 NJBS = $(shell nproc)
